@@ -19,18 +19,13 @@ __version__ = '1.0'
 import sys
 import alp
 import wap
-#import wolframBinding.wap as wap
-
-# requires python 2.6+
 
 def getInputArguments():
-	inputArguments = ''
-	for arg in sys.argv[1:]:
-		inputArguments += arg + ' '
+	inputArguments = "{query}" # get the input data from Alfred
 	
 	# return sample input
 	if not inputArguments:
-		inputArguments = 'd/dx x^2 + 3'
+		inputArguments = "d/dx x^2 + 3"
 
 	return inputArguments
 
@@ -60,13 +55,12 @@ def handleWolframResult(wolframQueryResult):
 			item['subtitle'] = subpod.Img()[0][0][1] # subpod image src
 			item['uid'] = 'wolfy' # priorization of items makes not much sense, therefore we use always the same
 			item['type'] = 'file'
-			item['arg'] = item['title']
+			item['arg'] = item['subtitle']
 			items.append(alp.Item(**item))
 	else:
 		print "todo error"
 
 	return items
-
 
 try:
 	inputArguments = getInputArguments()
@@ -74,7 +68,7 @@ try:
 	items = handleWolframResult(wolframQueryResult)
 	alp.feedback(items)
 except:
-	print '<items><item uid="error"><title>error</title><subtitle>~/error.log</subtitle></item></items>'
+	print '<items><item uid="error"><title>error</title><subtitle>' + inputArguments + '</subtitle></item></items>'
 
 
 #alp.feedback(items)
